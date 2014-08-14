@@ -1,24 +1,30 @@
 var Game = Class.extend({
-	init : function(state,framerate){
+	init : function(state,canvas){
+		this.canvas = canvas;
+		this.context = canvas.getContext("2d");
+		this.currentState = state;
+		this.mouse = new Mouse(this.canvas);
+		this.keyboard = new Keyboard();
+
 		var self = this;
-		this.lastFrame = +new Date;
-		requestAnimationFrame(function(now){self.update(now);});
-		
+		requestAnimationFrame(function(date){self.update(date)});
 	},
-	update : function(now){
+	update : function(date){
 		var self = this;
-		requestAnimationFrame(function(now){self.update(now);});
-		now = now ? now : +new Date();
-
-		var timeSinceLastFrame = now - this.lastFrame;
-		this.lastFrame = now;
-
-		if(this.currentState === undefined){
-			console.error("Game has no state... shouldn't happen :(");
-			return;
+		if(!this.lastFrameDate){
+			this.lastFrameDate = date;
 		}
-			this.currentState.update(timeSinceLastFrame/1000);
+		else{
+			if(this.currentState === undefined){
+				console.error("Game has no state... shouldn't happen :(");
+				return;
+			}
+			//console.log(date+" - "+this.lastFrameDate);
+			this.currentState._update((date-this.lastFrameDate)/1000);
 			this.currentState.render(this.context);
+			this.lastFrameDate = date;
+		}
+		requestAnimationFrame(function(date){self.update(date)});
 	},
 	changeState : function(state, transition){
 		if(this.currentState !== undefined){
@@ -36,6 +42,7 @@ var GameState = Class.extend({
 	 * @param game Game instance owning this GameState
 	 */
 	init : function(game,useKeyboard,useMouse){
+		this.clock = 0;
 		if(game === undefined)
 			console.error("GameState's game must be defined");
 		this.game = game;
@@ -75,5 +82,9 @@ var GameState = Class.extend({
 		this.game.mouse.removeListener(this);
 		this.game.keyboard.removeListener(this);
 		this.leave();
+	},
+	_update : function(t){
+		this.clock+=t;
+		this.update(t);
 	}
 });
