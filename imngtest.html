@@ -4,8 +4,22 @@
 		<title>Quad-Ninja</title>
 		<script src="Class.js"></script>
 		<script src="sprites.js"></script>
+		<script src="imagemanager.js"></script>
 	</head>
 	<body>
 		<canvas id="GameCanvas" style="margin:auto;display:block"></canvas>
+		<script>
+			var canvas = window.document.getElementById("GameCanvas");
+			var ctx = canvas.getContext('2d');
+			
+			var test = function(){
+				alert("woo");
+				
+				ctx.drawImage(im.getImage("test"),10,10);
+			}
+			
+			var im = new ImageManager(test);
+			im.load("test.png","test");
+		</script>
 	</body>
 </html>

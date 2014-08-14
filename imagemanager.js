@@ -14,7 +14,7 @@ var ImageManager = Class.extend({
 		
 		var img = new Image();
 		img.src = src;
-		img.onload = this.onLoad;
+		img.onload = function(){self.onLoad()};
 		img.onerror = function(){
 			console.warn('ImageManager : Image "'+name+'" could not be loaded.');
 			self.imagedata[name || src] = self.getImage("error");
@@ -30,7 +30,7 @@ var ImageManager = Class.extend({
 		return this.imagedata[name];
 	},
 	onLoad : function(){
-		self.stillLoading--;
+		this.stillLoading--;
 		if(!this.isLoading()){
 			this.callback();
 		}
