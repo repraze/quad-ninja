@@ -3,7 +3,6 @@ TrashState = GameState.extend({
 		this._super(game);
 	},
 	update : function(t){
-		console.log(t);
 	}
 });
 

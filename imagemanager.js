@@ -14,7 +14,7 @@ var ImageManager = Class.extend({
 		
 		var img = new Image();
 		img.src = src;
-		img.onload = function(){self.onLoad()};
+		img.onload = function(){self.onLoad(img)};
 		img.onerror = function(){
 			console.warn('ImageManager : Image "'+name+'" could not be loaded.');
 			self.imagedata[name || src] = self.getImage("error");
