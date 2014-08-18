@@ -1,0 +1,43 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Test ImageManager</title>
+		<script src="../Class.js"></script>
+		<script src="../game.js"></script>
+		<script src="../inputmanager.js"></script>
+		<script src="../imagemanager.js"></script>
+
+		<script src="../quadninja.js"></script>
+	</head>
+	<body>
+		<canvas id="gameCanvas" style="margin:auto;display:block"></canvas>
+		Look in the console.
+		<script>
+			imgMgr = new ImageManager(function(){});
+			var Loading = GameState.extend({
+			init : function(game){
+				this._super(game);
+				imgMgr.addListener(this);
+				this.imgSrc = ["test1.png","b","c"];
+				this.imgCounter = 3;
+				this.imgSrc.forEach(function(src){imgMgr.load(src);});
+			},
+update : function(t){
+	if(this.imgCounter === 0)
+		this.game.changeState(new EndState(this.game));
+},
+onImageLoad : function(name,success){
+	console.log(name+(success? " was" : " wasn't")+" loaded ");
+}
+					});
+			var Test =  Game.extend({
+				init : function()
+				{
+				this._super(new Loading(this),document.getElementById("gameCanvas"));
+				},
+					
+					});
+		new Test();
+		</script>
+	</body>
+</html>
