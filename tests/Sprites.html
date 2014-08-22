@@ -1,0 +1,55 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Test Sprite</title>
+		<script src="../Class.js"></script>
+		<script src="../game.js"></script>
+		<script src="../inputmanager.js"></script>
+		<script src="../imagemanager.js"></script>
+		<script src="../sprites.js"></script>
+
+		<script src="../quadninja.js"></script>
+	</head>
+	<body>
+		<canvas id="gameCanvas" style="margin:auto;display:block" width=500></canvas>
+		Look in the console.
+		<script>
+		imgMgr = new ImageManager(function(){});
+		sprtMgr = new SpriteManager(imgMgr);
+		var Loading = GameState.extend({
+			init : function(game){
+				this._super(game);
+				imgMgr.addListener(this);
+				this.imgSrc = ["test1.png","sprite1.png","c"];
+				this.imgCounter = 4;
+				this.imgSrc.forEach(function(src){imgMgr.load(src);});
+			},
+			update : function(t){
+				if(this.sprite)
+				{
+					this.sprite.update(t);
+				}
+			},
+			render : function(context){
+			if(this.sprite){
+				this.sprite.draw(context);
+				}
+			},
+			onImageLoad : function(name,success){
+				if(name==="sprite1.png"){
+					sprtMgr.registerSprite({spriteName:"test",imageName:name,frames:5,speed:0.1});
+					this.sprite=sprtMgr.getSprite("test");
+				}
+				console.log(name+(success? " was" : " wasn't")+" loaded ");
+				this.imgCounter--;
+			}
+		});
+		var SpriteTest =  Game.extend({
+		init : function(){
+			this._super(new Loading(this),document.getElementById("gameCanvas"));
+		}			
+		});
+		new SpriteTest();
+		</script>
+	</body>
+</html>

@@ -1,30 +1,27 @@
 var Sprite = Class.extend({
 	init : function(i,f,s,is){
 		this.img = i;
-		this.maxFrame = f;
+		this.maxFrame = typeof f !== "undefined" ? f : 1;
 		this.speed = s || 0;
 		this.currentFrame = is || 0;
 		
 		this.clock = 0;
 	},
-	draw : function(ctx,dt){
-		if(this.maxFrame!=null){
+	draw : function(ctx){
 			ctx.drawImage(
-				this.sprites[s],
-				this.sprites[s].frame * this.sprites[s].width / spriteInfo[s].frames,
+				this.img,
+				this.currentFrame * this.img.width / this.maxFrame,
 				0,
-				this.sprites[s].width / spriteInfo[s].frames,
-				this.sprites[s].height,
+				this.img.width / this.maxFrame,
+				this.img.height,
 				0,
 				0,
-				this.sprites[s].width / spriteInfo[s].frames,
-				this.sprites[s].height);
+				this.img.width / this.maxFrame,
+				this.img.height);
 			return;
-		}
-		ctx.drawImage(this.sprites[s], 0, 0);
 	},
 	update : function(dt){
-		if(this.maxFrame!=null){
+		if(this.maxFrame!=1){
 			
 			this.clock += dt;
 			if(this.clock>=this.speed){
@@ -43,8 +40,8 @@ var Sprite = Class.extend({
 //data: {imageName: "block_3", <frame: 3, speed: 20, init: 0, spriteName: "block_3_mid">}
 
 var SpriteManager = Class.extend({
-	init : function(imagemng) {
-		this.imagemng = imagemng;
+	init : function(imageMgr) {
+		this.imageMgr = imageMgr;
 		
 		this.spritedata = {};
 	},
@@ -57,9 +54,11 @@ var SpriteManager = Class.extend({
 			return this.getSprite("error");
 		}
 		
-		return new Sprite(imagemng.getImage(name),
-			this.spritedata["frame"],
-			this.spritedata["speed"],
-			this.spritedata["init"]);
+		return new Sprite(this.imageMgr.getImage(this.spritedata[name].imageName),
+			this.spritedata[name].frames,
+			this.spritedata[name].speed,
+			this.spritedata[name].init,
+			this.spritedata[name].spriteName
+			);
 	}
 });

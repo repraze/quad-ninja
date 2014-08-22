@@ -33,15 +33,17 @@ var ImageManager = Class.extend({
 		return this.imagedata[name];
 	},
 	onLoad : function(name, success, imgRef){
+		//add the image to the list
+		this.imagedata[name] = imgRef; 
 		this.stillLoading--;
+		
+		//inform listeners
 		this.listeners.forEach(
 				function(listener){
 					if(typeof listener.onImageLoad === 'function' )
 						listener.onImageLoad(name,success,imgRef);
 				});
 
-		//add the image to the list
-		this.imagedata[name] = imgRef; 
 
 		if(!this.isLoading()){
 			this.callback();
