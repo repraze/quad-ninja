@@ -136,11 +136,12 @@ var Quadtree = Class.extend({
 		return [];
 	},
 	getObjectsIntersectingRegion : function(bounds){
-		var objs  = getObjectsNearRegion(bounds,objs);
+		var objs  = this.getObjectsNearRegion(bounds,objs);
 		for(var i = objs.length-1 ; i>=0; i--){
 			if(!aabbIntersect(objs[i].bounds,bounds))
 				objs.splice(1,i);
 		}
+		return objs;
 	},
 	draw : function(context){
 		//if(this.parent===null);

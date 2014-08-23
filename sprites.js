@@ -34,7 +34,9 @@ var Sprite = Class.extend({
 	},
 	copy : function(){
 		return new Sprite(this.img,this.maxFrame,this.speed,this.currentFrame);
-	}
+	},
+	getWidth : function(){return this.img.width},
+	getHeight: function(){return this.img.height}
 });
 
 //data: {imageName: "block_3", <frame: 3, speed: 20, init: 0, spriteName: "block_3_mid">}
