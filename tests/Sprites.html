@@ -37,7 +37,7 @@
 			},
 			onImageLoad : function(name,success){
 				if(name==="sprite1.png"){
-					sprtMgr.registerSprite({spriteName:"test",imageName:name,frames:5,speed:0.1});
+					sprtMgr.registerSprite({spriteName:"test",imageName:name,frames:10,speed:1/10});
 					this.sprite=sprtMgr.getSprite("test");
 				}
 				console.log(name+(success? " was" : " wasn't")+" loaded ");
