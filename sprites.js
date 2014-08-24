@@ -22,7 +22,6 @@ var Sprite = Class.extend({
 	},
 	update : function(dt){
 		if(this.maxFrame!=1){
-			
 			this.clock += dt;
 			if(this.clock>=this.speed){
 				this.clock-=this.speed;
@@ -35,11 +34,11 @@ var Sprite = Class.extend({
 	copy : function(){
 		return new Sprite(this.img,this.maxFrame,this.speed,this.currentFrame);
 	},
-	getWidth : function(){return this.img.width},
-	getHeight: function(){return this.img.height}
+	getWidth : function(){return this.img.width/this.maxFrame;},
+	getHeight: function(){return this.img.height;}
 });
 
-//data: {imageName: "block_3", <frame: 3, speed: 20, init: 0, spriteName: "block_3_mid">}
+//data: {imageName: "block_3", <frame: 1, speed: 1, init: 0, spriteName: "block_3_mid">}
 
 var SpriteManager = Class.extend({
 	init : function(imageMgr) {
@@ -55,12 +54,10 @@ var SpriteManager = Class.extend({
 			console.warn('SpriteManager : Sprite "'+name+'" not found.');
 			return this.getSprite("error");
 		}
-		
 		return new Sprite(this.imageMgr.getImage(this.spritedata[name].imageName),
 			this.spritedata[name].frames,
 			this.spritedata[name].speed,
-			this.spritedata[name].init,
-			this.spritedata[name].spriteName
+			this.spritedata[name].init
 			);
 	}
 });

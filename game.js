@@ -5,7 +5,7 @@ var Game = Class.extend({
 		this.currentState = state;
 		this.mouse = new Mouse(this.canvas);
 		this.keyboard = new Keyboard();
-
+		this.aspectRatio = this.canvas.width/this.canvas.height;
 		var self = this;
 		requestAnimationFrame(function(date){self.update(date)});
 	},
@@ -33,6 +33,8 @@ var Game = Class.extend({
 		this.currentState = state;
 		this.currentState._enter();
 	},
+	resize : function(){
+	}
 	
 });
 

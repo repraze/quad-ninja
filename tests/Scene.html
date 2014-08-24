@@ -1,0 +1,93 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Test Scene</title>
+		<script src="../Class.js"></script>
+		<script src="../game.js"></script>
+		<script src="../inputmanager.js"></script>
+		<script src="../imagemanager.js"></script>
+		<script src="../sprites.js"></script>
+		<script src="../quadtree.js"></script>
+		<script src="../entity.js"></script>
+		<script src="../scene.js"></script>
+	</head>
+	<body>
+		<canvas id="gameCanvas" style="margin:auto;display:block" width=1000 height=640></canvas>
+		Look in the console.
+		<script>
+		var	imgMgr = new ImageManager(function(){});
+		var sprtMgr = new SpriteManager(imgMgr);
+
+		var Hero = Entity.extend({
+			init : function(){
+			this._super({sprite:sprtMgr.getSprite("test")});
+			},
+			udpate : function(t){
+				Entity.update.call(this,t);
+			}
+		});
+
+		var Loading = GameState.extend({
+			init : function(game){
+				this._super(game);
+				imgMgr.addListener(this);
+				this.imgSrc = ["test1.png","sprite1.png"];
+				this.imgCounter = this.imgSrc.length;
+				this.imgSrc.forEach(function(src){imgMgr.load(src);});
+			},
+			update : function(t){
+			},
+			render : function(context){
+				
+			},
+			onImageLoad : function(name,success){
+				if(name==="sprite1.png"){
+					sprtMgr.registerSprite({spriteName:"test",imageName:name,frames:10,speed:1/10});
+				}
+				console.log(name+(success? " was" : " wasn't")+" loaded ");
+				this.imgCounter--;
+				if(this.imgCounter==0)
+					this.game.changeState(new SimpleScene(this.game));
+			}
+		});
+
+		var SimpleScene = GameState.extend({
+			init : function(game){
+				this._super(game);
+				this.camera = new Camera({x:0,y:0},{width:500,height:350/game.aspectRatio});
+				this.scene = new Scene({width:64*120,height:800},this.camera);
+				for(var i =0; i< 10;i++){
+					var ent = new Hero();
+					ent.setPosition({x:i*ent.getSprite().getWidth(),y:0});
+					this.scene.addEntity(ent);
+				}
+			},
+			render : function(context){
+				context.clearRect(0,0,this.game.canvas.width,this.game.canvas.height);
+				context.scale(this.game.canvas.width,this.game.canvas.height);
+				context.fillStyle = "#dda";
+				context.fillRect(0,0,0,1);
+				this.scene.render(context);
+				context.scale(1/this.game.canvas.width,1/this.game.canvas.height);
+			},
+			update : function(t){
+				if(this.game.keyboard.isKeyDown(Key.DOWN))
+					this.camera.zoom(-15);
+				if(this.game.keyboard.isKeyDown(Key.UP))
+					this.camera.zoom(15);
+				this.scene.update(t);
+			}
+			
+		});
+
+		var SceneTest =  Game.extend({
+			init : function(){
+				this._super(new Loading(this),document.getElementById("gameCanvas"));
+				this.context.mozImageSmoothingEnabled = false;
+			}
+		});
+
+		new SceneTest();
+		</script>
+	</body>
+</html>

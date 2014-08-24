@@ -31,7 +31,7 @@ var Quadtree = Class.extend({
 
 	//exposed method to insert an object
 	insertObject : function(obj){
-		if(!this.containsRegion(obj.bounds)){
+		if(!this.containsRegion(obj.getBounds())){
 			return false;
 		}
 		else
@@ -122,7 +122,7 @@ var Quadtree = Class.extend({
 		}
 		return objs;
 	},
-	getObjectsNearRegion : function(bounds,objs){
+	getObjectsNearRegion : function(bounds){
 		if(this.intersects(bounds)){
 			if(!this.leaf){
 				var arrsObj = [];
@@ -136,19 +136,19 @@ var Quadtree = Class.extend({
 		return [];
 	},
 	getObjectsIntersectingRegion : function(bounds){
-		var objs  = this.getObjectsNearRegion(bounds,objs);
+		var objs  = this.getObjectsNearRegion(bounds);
 		for(var i = objs.length-1 ; i>=0; i--){
-			if(!aabbIntersect(objs[i].bounds,bounds))
-				objs.splice(1,i);
+			if(!aabbIntersect(objs[i].getBounds(),bounds))
+				objs.splice(i,1);
 		}
 		return objs;
 	},
 	draw : function(context){
-		//if(this.parent===null);
-		//	context.beginPath();
+		if(this.parent===null);
+			context.beginPath();
 		if(this.leaf){
-		//	var b = this.bounds;
-		//	context.rect(b.xmin,b.ymin, b.xmax-b.xmin, b.ymax-b.ymin);
+			var b = this.bounds;
+			context.rect(b.xmin,b.ymin, b.xmax-b.xmin, b.ymax-b.ymin);
 		}
 		else{
 			for(var i = 0; i<4 ; i++)
@@ -159,11 +159,12 @@ var Quadtree = Class.extend({
 
 		for(var i =0; i< this.objects.length; i++){
 			var o = this.objects[i];
-			context.fillStyle=o.color;
-			context.fillRect(o.bounds.x,o.bounds.y,o.bounds.width, o.bounds.height);
+			context.fillStyle = "#aad";
+			context.rect(o.getBounds().x,o.getBounds().y,o.getBounds().width, o.getBounds().height);
+		context.stroke();
 		}
-	//	if(this.parent===null);
-	//	context.stroke();
+		if(this.parent===null);
+		context.stroke();
 
     },
 	removeObject : function(obj){
@@ -179,13 +180,13 @@ var Quadtree = Class.extend({
 	},
 	moveObject : function(obj){
 		var baseNode = obj.qtNode;
-		if(baseNode.containsRegion(obj.bounds)){
+		if(baseNode.containsRegion(obj.getBounds())){
 			if(baseNode.leaf)//nothing to do
 				return true;
 			else{ //look if the object is contained in a child
 				var subNode = null;
 				for(var i=0; i<4; i++){
-					if(baseNode.trees[i].containsRegion(obj.bounds)){
+					if(baseNode.trees[i].containsRegion(obj.getBounds())){
 						subNode = baseNode.trees[i];
 						break;
 					}
@@ -198,7 +199,7 @@ var Quadtree = Class.extend({
 			}
 
 		}
-		else if(this.containsRegion(obj.bounds))
+		else if(this.containsRegion(obj.getBounds()))
 		{
 			baseNode.removeObject(obj);
 			//this.insertObject(obj);
