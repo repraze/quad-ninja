@@ -51,7 +51,7 @@ var Keyboard = Class.extend({
 	removeListener : function(listener){
 		if(typeof listener !== 'number')
 		listener = this.listeners.indexOf(listener);
-		this.listeners.splice(listener);
+		this.listeners.splice(listener,1);
 	},
 
 	update : function(){
