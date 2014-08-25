@@ -8,6 +8,7 @@ var Game = Class.extend({
 		this.aspectRatio = this.canvas.width/this.canvas.height;
 		var self = this;
 		requestAnimationFrame(function(date){self.update(date)});
+		this.currentState._enter();
 	},
 	update : function(date){
 		var self = this;
