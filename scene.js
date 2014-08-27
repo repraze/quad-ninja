@@ -23,7 +23,9 @@ var Scene = Class.extend({
 	},
 	update : function(t){
 		this.entities.forEach(function(entity){entity.update(t)});
-		this.camera.update(t);
+		if(this.camera){
+			this.camera.update(t);
+		}
 	},
 	setCamera : function(camera){
 		this.camera = camera;

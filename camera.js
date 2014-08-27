@@ -4,12 +4,13 @@ var Camera = Entity.extend({
 		this.width = size.width;
 		this.height = size.height;
 		this._aspectRatio = this.width/this.height;
+		this._axis = Camera.Axis.BOTH;
 	},
-	getBounds : function(){
+	getBounds : function(){ //needs to be fixed
 		return {x:this._position.x-this.width/2,
 				y:this._position.y-this.height/2,
-				width:this.width+this.width/2,
-				height:this.height+this.width/2};//center cam
+				width:this.width,
+				height:this.height};//center cam
 	},
 	zoom : function(widthDiff){
 		this.width-=widthDiff;
@@ -20,16 +21,23 @@ var Camera = Entity.extend({
 	follow : function(entity){
 		this.followed = entity;
 	},
+	setAxis : function(axis){
+		this._axis = axis;
+	},
 	update : function(t){
 		//this._super.update(t);//not sure how to call
 		if(this.followed != null){
 			tmpP = this.followed.getPosition();
 			tmpB = this.followed.getBounds();
-			this._position.x = tmpP.x+tmpB.width/2;
-			this._position.y = tmpP.y+tmpB.height/2;
+			if(this._axis == Camera.Axis.HORIZONTAL || this._axis == Camera.Axis.BOTH){
+				this._position.x = tmpP.x+tmpB.width/2;
+			}
+			if(this._axis == Camera.Axis.VERTICAL || this._axis == Camera.Axis.BOTH){
+				this._position.y = tmpP.y+tmpB.height/2;
+			}
 			//this._super.setPosition(this.followed.getPosition()); //not working, bug?
 			/*
-				After review will add other features such as boundaries and following axis
+				After review will add other features such as boundaries
 			*/
 		}
 	},
@@ -38,3 +46,10 @@ var Camera = Entity.extend({
 		context.translate(-this.getPosition().x+this.width/2,-this.getPosition().y+this.height/2);
 	}
 });
+//list axis
+Camera.Axis = {
+        NONE: "none", 
+        HORIZONTAL: "horizontal", 
+        VERTICAL: "vertical", 
+        BOTH: "both"
+    };

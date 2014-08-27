@@ -95,6 +95,7 @@
 				}
 				this.hero = new Hero();
 				this.camera.follow(this.hero);
+				this.camera.setAxis(Camera.Axis.HORIZONTAL);
 				this.hero.move({x:0,y:64});
 				this.scene.addEntity(this.hero);
 				this.game.keyboard.addListener(this.hero);
