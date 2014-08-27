@@ -21,7 +21,8 @@ var Game = Class.extend({
 				return;
 			}
 			//console.log(date+" - "+this.lastFrameDate);
-			this.currentState._update((date-this.lastFrameDate)/1000);
+			//this.currentState._update((date-this.lastFrameDate)/1000); //old
+			this.currentState._update(Math.min(0.5,(date-this.lastFrameDate)/1000)); //minimize acceleration upon focus, test, possibility to put calculated number instead of constant
 			this.currentState.render(this.context);
 			this.lastFrameDate = date;
 		}
