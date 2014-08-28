@@ -9,10 +9,11 @@
 		<script src="../sprites.js"></script>
 		<script src="../quadtree.js"></script>
 		<script src="../entity.js"></script>
+		<script src="../camera.js"></script>
 		<script src="../scene.js"></script>
 	</head>
 	<body>
-		<canvas id="gameCanvas" style="margin:auto;display:block" width=1000 height=250></canvas>
+		<canvas id="gameCanvas" style="margin:auto;display:block" width=1000 height=500></canvas>
 		A scene with block represented as entities.<br>
 		LEFT - RIGHT to move <br>
 		UP - DOWN to zoom in/out <br>
@@ -87,14 +88,17 @@
 				sprtMgr.registerSprite({spriteName:"hero_running_right",imageName:"sprite3.png",frames:8,speed:0.1});
 				sprtMgr.registerSprite({spriteName:"hero_running_left",imageName:"sprite4.png",frames:8,speed:0.1});
 				sprtMgr.registerSprite({spriteName:"hero_idle",imageName:"sprite5.png",frames:8,speed:0.2});
-				this.camera = new Camera({x:0,y:0},{width:500,height:500/game.aspectRatio});
-				this.scene = new Scene({width:64*120,height:200},this.camera);
+				this.camera = new Camera({x:60,y:60},{width:500,height:500/game.aspectRatio});
+				this.scene = new Scene({width:64*120,height:500},this.camera);
 				for(var i =0; i< 10;i++){
 					var ent = new Entity({sprite:sprtMgr.getSprite("dirt")});
-					ent.setPosition({x:i*ent.getSprite().getWidth(),y:64});
+					ent.setPosition({x:i*ent.getSprite().getWidth(),y:128});
 					this.scene.addEntity(ent);
 				}
 				this.hero = new Hero();
+				this.camera.follow(this.hero);
+				this.camera.setAxis(Camera.Axis.HORIZONTAL);
+				this.hero.move({x:0,y:64});
 				this.scene.addEntity(this.hero);
 				this.game.keyboard.addListener(this.hero);
 			},

@@ -1,21 +1,3 @@
-var Camera = Entity.extend({
-	init : function(position,size){
-		this._super({position:position});
-		this.width = size.width;
-		this.height = size.height;
-		this._aspectRatio = this.width/this.height;
-	},
-	getBounds : function(){
-		return {x:this._position.x,y:this._position.y, width:this.width, height:this.height};
-	},
-	zoom : function(widthDiff){
-		this.width-=widthDiff;
-		if(this.width<=0)
-			this.width=1;
-		this.height = this.width/this._aspectRatio;
-	}
-});
-
 var Scene = Class.extend({
 	init : function(size,camera){
 		this.camera = camera;
@@ -26,14 +8,14 @@ var Scene = Class.extend({
 
 	render : function(context){
 		if(this.camera){
-		context.scale(1/this.camera.width,1/this.camera.height);
-		context.translate(-this.camera.x,-this.camera.y);
-		//this.tree.draw(context);
-		//Todo --> layer based rendering
-		var inFrameEntities = this.tree.getObjectsIntersectingRegion(this.camera.getBounds());
-		inFrameEntities.forEach(function(entity){entity.draw(context)});
-		context.translate(this.camera.x,this.camera.y);
-		context.scale(this.camera.width,this.camera.height);
+			context.save();
+			this.camera.place(context);
+			//this.tree.draw(context);
+			//Todo --> layer based rendering
+			var inFrameEntities = this.tree.getObjectsIntersectingRegion(this.camera.getBounds());
+			inFrameEntities.forEach(function(entity){entity.draw(context)});
+			
+			context.restore();
 		}
 		else{
 			console.warn("No camera in Scene");
@@ -41,6 +23,9 @@ var Scene = Class.extend({
 	},
 	update : function(t){
 		this.entities.forEach(function(entity){entity.update(t)});
+		if(this.camera){
+			this.camera.update(t);
+		}
 	},
 	setCamera : function(camera){
 		this.camera = camera;
