@@ -14,7 +14,8 @@
 	<body>
 		<canvas id="gameCanvas" style="margin:auto;display:block" width=1000 height=250></canvas>
 		A scene with block represented as entities.<br>
-		Left - Right to move, 
+		LEFT - RIGHT to move <br>
+		UP - DOWN to zoom in/out <br>
 		Character : <a href="http://cozah.deviantart.com/art/Human-Coza-Sprite-Sheet-279561640">Human Coza Sprite Sheet</a><br>
 
 		<script>
@@ -42,6 +43,7 @@
 			},
 			idle : function(){
 				this.dir = 0;
+					//this.setSprite(sprtMgr.getSprite("hero_idle"));
 					this.setSprite(sprtMgr.getSprite("hero_idle"));
 		    },
 			run : function(dir){
