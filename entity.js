@@ -5,11 +5,50 @@ var Vector = Class.extend({
 	set : function(vec){
 		this.x = vec.x;
 		this.y = vec.y;
+		return this;
 	},
 	clone : function(){
 		return new Vector(this.x,this.y);
+	},
+	add : function(vec){
+		this.x+=vec.x;
+		this.y+=vec.y;
+		return this;
+	},
+	sub : function(vec){
+		this.x-=vec.x;
+		this.y-=vec.y;
+		return this;
+	},
+	mul : function(k){
+		this.x *= k;
+		this.y *= k;
+	},
+	div : function(k){
+		this.x /= k;
+		this.y /= k;
+		return this;
+	},
+	dot : function(vec){
+		return this.x * vec.x + this.y * vec.y;
+	},
+	normalize : function(){
+		this.div(this.length());
+	},
+	sqLength : function(){
+		return this.x*this.x+this.y*this.y;
+	},
+	length : function(){
+		return Math.sqrt( this.x*this.x+this.y*this.y);
+	},
+	distanceTo : function(vec){
+		return this.clone().sub(vec).length();
+	},
+	sqDistanceTo : function(vec){
+		return this.clone().sub(vec).sqLength();
 	}
 });
+
 var Entity = Class.extend({
 	init : function(opts){
 		this.scene=null;

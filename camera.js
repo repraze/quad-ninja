@@ -31,13 +31,13 @@ var Camera = Entity.extend({
 		if(this.followed != null){
 			tmpP = this.followed.getPosition();
 			tmpB = this.followed.getBounds();
-			if(this._axis == Camera.Axis.HORIZONTAL || this._axis == Camera.Axis.BOTH){
-				this._position.x = tmpP.x+tmpB.width/2;
+			if(this._axis | Camera.Axis.HORIZONTAL){
+				tmpP.add({x:tmpB.width/2, y:0});
 			}
-			if(this._axis == Camera.Axis.VERTICAL || this._axis == Camera.Axis.BOTH){
-				this._position.y = tmpP.y+tmpB.height/2;
+			if(this._axis | Camera.Axis.VERTICAL){
+				tmpP.add({x:0,y:tmpB.height/2});
 			}
-			//this.setPosition(this.followed.getPosition()); // now working
+			this.setPosition(tmpP); // now working
 			/*
 				After review will add other features such as boundaries
 			*/
@@ -50,8 +50,8 @@ var Camera = Entity.extend({
 });
 //list axis
 Camera.Axis = {
-        NONE: "none", 
-        HORIZONTAL: "horizontal", 
-        VERTICAL: "vertical", 
-        BOTH: "both"
+        NONE: 0, 
+        HORIZONTAL: 1, 
+        VERTICAL: 2, 
+        BOTH: 3
     };
