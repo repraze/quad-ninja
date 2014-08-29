@@ -5,6 +5,9 @@ var Vector = Class.extend({
 	set : function(vec){
 		this.x = vec.x;
 		this.y = vec.y;
+	},
+	clone : function(){
+		return new Vector(this.x,this.y);
 	}
 });
 var Entity = Class.extend({
@@ -46,7 +49,7 @@ var Entity = Class.extend({
 			this.scene.onEntityMove(this);
 	},
 	getPosition : function(){
-		return this._position; //TODO return a clone
+		return this._position.clone(); //TODO return a clone
 	},
 	move : function(translation){
 		this.setPosition({x:this._position.x+translation.x,y:this._position.y+translation.y});

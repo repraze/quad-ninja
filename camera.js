@@ -26,6 +26,8 @@ var Camera = Entity.extend({
 	},
 	update : function(t){
 		//this._super.update(t);//not sure how to call
+		//Entity.prototype.update.call(this,t);//The javascript way to do this.
+		//Maybe we can just create a "_update" function for entities. 
 		if(this.followed != null){
 			tmpP = this.followed.getPosition();
 			tmpB = this.followed.getBounds();
@@ -35,7 +37,7 @@ var Camera = Entity.extend({
 			if(this._axis == Camera.Axis.VERTICAL || this._axis == Camera.Axis.BOTH){
 				this._position.y = tmpP.y+tmpB.height/2;
 			}
-			//this._super.setPosition(this.followed.getPosition()); //not working, bug?
+			//this.setPosition(this.followed.getPosition()); // now working
 			/*
 				After review will add other features such as boundaries
 			*/

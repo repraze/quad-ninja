@@ -88,7 +88,7 @@
 				sprtMgr.registerSprite({spriteName:"hero_running_right",imageName:"sprite3.png",frames:8,speed:0.1});
 				sprtMgr.registerSprite({spriteName:"hero_running_left",imageName:"sprite4.png",frames:8,speed:0.1});
 				sprtMgr.registerSprite({spriteName:"hero_idle",imageName:"sprite5.png",frames:8,speed:0.2});
-				this.camera = new Camera({x:60,y:60},{width:500,height:500/game.aspectRatio});
+				this.camera = new Camera(new Vector(60,60),{width:500,height:500/game.aspectRatio});
 				this.scene = new Scene({width:64*120,height:500},this.camera);
 				for(var i =0; i< 10;i++){
 					var ent = new Entity({sprite:sprtMgr.getSprite("dirt")});
@@ -97,7 +97,7 @@
 				}
 				this.hero = new Hero();
 				this.camera.follow(this.hero);
-				this.camera.setAxis(Camera.Axis.HORIZONTAL);
+				this.camera.setAxis(Camera.Axis.BOTH);
 				this.hero.move({x:0,y:64});
 				this.scene.addEntity(this.hero);
 				this.game.keyboard.addListener(this.hero);
