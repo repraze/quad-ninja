@@ -1,4 +1,4 @@
-<tml>
+<html>
 	<head>
 		<meta charset="UTF-8">
 		<title>Test Scene</title>
@@ -11,6 +11,7 @@
 		<script src="../entity.js"></script>
 		<script src="../camera.js"></script>
 		<script src="../scene.js"></script>
+		<script src="../viewport.js"></script>
 	</head>
 	<body>
 		<canvas id="gameCanvas" style="margin:auto;display:block; border : 10px solid black" width=1000 height=500></canvas>
@@ -88,8 +89,10 @@
 				sprtMgr.registerSprite({spriteName:"hero_running_right",imageName:"sprite3.png",frames:8,speed:0.1});
 				sprtMgr.registerSprite({spriteName:"hero_running_left",imageName:"sprite4.png",frames:8,speed:0.1});
 				sprtMgr.registerSprite({spriteName:"hero_idle",imageName:"sprite5.png",frames:8,speed:0.2});
-				this.camera = new Camera(new Vector(60,60),{width:500,height:500/game.aspectRatio});
-				this.scene = new Scene({width:64*120,height:500},this.camera);
+				this.scene = new Scene({width:64*10,height:500});
+				this.camera = new Camera(this.scene,new Vector(60,60),{width:500,height:500/game.aspectRatio});
+				this.viewport = new Viewport(this.game.canvas);
+				this.viewport.setCamera(this.camera);
 				for(var i =0; i< 10;i++){
 					var ent = new Entity({sprite:sprtMgr.getSprite("dirt")});
 					ent.setPosition({x:i*ent.getSprite().getWidth(),y:128});
@@ -107,7 +110,7 @@
 				context.scale(this.game.canvas.width,this.game.canvas.height);
 				context.fillStyle = "#dda";
 				context.fillRect(0,0,0,1);
-				this.scene.render(context);
+				this.viewport.render(context);
 				context.scale(1/this.game.canvas.width,1/this.game.canvas.height);
 			},
 			update : function(t){
@@ -119,7 +122,7 @@
 					this.hero.run(-1);
 				if(this.game.keyboard.isKeyDown(Key.RIGHT))
 					this.hero.run(1);
-				this.scene.update(t);
+				this.camera.update(t);
 			}
 			
 		});

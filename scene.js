@@ -1,37 +1,19 @@
 var Scene = Class.extend({
-	init : function(size,camera){
-		this.camera = camera;
+	init : function(size){
 		this.tree = new Quadtree(16,{xmin:0,ymin:0,xmax:size.width,ymax:size.height},8);
 		this.entities = [];
 		this.layers = [];
+		this._size = size;
 	},
 
-	render : function(context){
-		if(this.camera){
-			context.save();
-			this.camera.place(context);
-			//this.tree.draw(context);
-			//Todo --> layer based rendering
-			var inFrameEntities = this.tree.getObjectsIntersectingRegion(this.camera.getBounds());
-			inFrameEntities.forEach(function(entity){entity.draw(context)});
-			
-			context.restore();
-		}
-		else{
-			console.warn("No camera in Scene");
-		}
+	render : function(context,bounds){
+		//this.tree.draw(context);
+		//Todo --> layer based rendering
+		var inFrameEntities = this.tree.getObjectsIntersectingRegion(bounds);
+		inFrameEntities.forEach(function(entity){entity.draw(context)});
 	},
 	update : function(t){
 		this.entities.forEach(function(entity){entity.update(t)});
-		if(this.camera){
-			this.camera.update(t);
-		}
-	},
-	setCamera : function(camera){
-		this.camera = camera;
-	},
-	getCamera : function(){
-		return this.camera;
 	},
 	getEntity : function(name,hint){
 	
@@ -42,5 +24,8 @@ var Scene = Class.extend({
 	},
 	_onEntityMove : function(entity){
 		this.tree.moveObject(entity);
+	},
+	getSize : function(){
+		return this._size;
 	}
 });
