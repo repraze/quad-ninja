@@ -8,12 +8,12 @@ var Viewport  = Class.extend({
 			}
 		}
 		else{
-			this.bounds={x:0,y:0,width:this.canvas.width, height:this.canvas.height};
+			this._bounds={x:0,y:0,width:this.canvas.width, height:this.canvas.height};
 		}
 		this.context = this.canvas.getContext("2d");
 	},
 	setBounds : function(bounds){
-		this.bounds={x:0,y:0,width:canvas.width, height:canvas.height};
+		this._bounds={x:0,y:0,width:canvas.width, height:canvas.height};
 		if(bounds.x<0 ||
 		   bounds.y<0 ||
 		   (bounds.x+bounds.width)>this.canvas.width ||
@@ -22,13 +22,23 @@ var Viewport  = Class.extend({
 		   }
 		return true;
 	},
+	getBounds : function(){
+		return {x:this._bounds.width,y:this._bounds.y,width:this._bounds.width,height:this._bounds.height};
+	}
 	render : function(){
 		//TODO clipping
-		this.context.translate(this.bounds.x,this.bounds.y);
-		this.context.scale(this.bounds.width,this.bounds.height);
-		this.camera.render(this.context);
-		this.context.scale(1/this.bounds.width,1/this.bounds.height);
-		this.context.translate(-this.bounds.x,-this.bounds.y);
-
+		if(this.camera){
+			this.context.translate(this._bounds.x,this._bounds.y);
+			this.context.scale(this._bounds.width,this._bounds.height);
+			this._camera.render(this.context);
+			this.context.scale(1/this._bounds.width,1/this._bounds.height);
+			this.context.translate(-this._bounds.x,-this._bounds.y);
+		}
+	},
+	setCamera : function(camera){
+		this._camera = camera;
+	},
+	getCamera : function(){
+		return this._camera;
 	}
 });
