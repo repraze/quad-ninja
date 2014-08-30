@@ -52,7 +52,9 @@ var Vector = Class.extend({
 var Entity = Class.extend({
 	init : function(opts){
 		this.scene=null;
-		this._position = opts.position  || new Vector();
+		this._position = new Vector();
+		if(opts.position)
+			this.setPosition(opts.position);
 		this.bounds = {x:this._position.x,y:this._position.y,width:0,height:0}
 		if(opts.sprite)
 			this.setSprite(opts.sprite);
