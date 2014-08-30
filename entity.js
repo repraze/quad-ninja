@@ -54,7 +54,7 @@ var Entity = Class.extend({
 		this.scene=null;
 		this._position = new Vector();
 		if(opts.position)
-			this.setPosition(opts.position);
+			this._position.set(opts.position);
 		this.bounds = {x:this._position.x,y:this._position.y,width:0,height:0}
 		if(opts.sprite)
 			this.setSprite(opts.sprite);
