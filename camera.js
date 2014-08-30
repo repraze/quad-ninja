@@ -27,10 +27,6 @@ var Camera = Entity.extend({
 		this._axis = axis;
 	},
 	update : function(t){
-		//this._super.update(t);//not sure how to call
-		if(this._scene){
-			this._scene.update(t);
-		}
 		//Entity.prototype.update.call(this,t);//The javascript way to do this.
 		//Maybe we can just create a "_update" function for entities.
 		if(this.followed != null){

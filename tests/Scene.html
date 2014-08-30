@@ -107,11 +107,9 @@
 			},
 			render : function(context){
 				context.clearRect(0,0,this.game.canvas.width,this.game.canvas.height);
-				context.scale(this.game.canvas.width,this.game.canvas.height);
 				context.fillStyle = "#dda";
 				context.fillRect(0,0,0,1);
 				this.viewport.render(context);
-				context.scale(1/this.game.canvas.width,1/this.game.canvas.height);
 			},
 			update : function(t){
 				if(this.game.keyboard.isKeyDown(Key.DOWN))
@@ -122,6 +120,7 @@
 					this.hero.run(-1);
 				if(this.game.keyboard.isKeyDown(Key.RIGHT))
 					this.hero.run(1);
+
 				this.scene.update(t);
 				this.camera.update(t);
 			}

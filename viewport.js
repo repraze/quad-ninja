@@ -29,9 +29,9 @@ var Viewport  = Class.extend({
 		//TODO clipping
 		if(this._camera){
 			this.context.translate(this._bounds.x,this._bounds.y);
-			//this.context.scale(this._bounds.width,this._bounds.height); //TODO ratio camera/viewport , modify aspectratio 
+			this.context.scale(this._bounds.width,this._bounds.height); //TODO ratio camera/viewport , modify aspectratio 
 			this._camera.render(this.context);
-			//this.context.scale(1/this._bounds.width,1/this._bounds.height);
+			this.context.scale(1/this._bounds.width,1/this._bounds.height);
 			this.context.translate(-this._bounds.x,-this._bounds.y);
 		}
 	},
