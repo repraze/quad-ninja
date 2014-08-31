@@ -136,6 +136,10 @@
 				context.fillRect(0,0,0,1);
 				this.viewport1.render(context);
 				this.viewport2.render(context);
+				context.font = "30px arial";
+				context.fillStyle = "black";
+				context.textAlign = "end";
+				context.fillText(this.game.getFPS().toFixed(2),this.game.canvas.width,30);
 			},
 			update : function(t){
 				if(this.game.keyboard.isKeyDown(Key.DOWN))
