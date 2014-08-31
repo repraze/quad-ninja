@@ -9,6 +9,10 @@ var Game = Class.extend({
 		var self = this;
 		requestAnimationFrame(function(date){self.update(date)});
 		this.currentState._enter();
+		
+		//Debugging
+		this.fpsOffset = 0;
+		this.fpsArray = new Array(10);
 	},
 	update : function(date){
 		var self = this;
@@ -22,6 +26,7 @@ var Game = Class.extend({
 			}
 			//console.log(date+" - "+this.lastFrameDate);
 			//this.currentState._update((date-this.lastFrameDate)/1000); //old
+			var fps
 			this.currentState._update(Math.min(0.05,(date-this.lastFrameDate)/1000)); //minimize acceleration upon focus, test, possibility to put calculated number instead of constant
 			this.currentState.render(this.context);
 			this.lastFrameDate = date;
@@ -36,6 +41,9 @@ var Game = Class.extend({
 		this.currentState._enter();
 	},
 	resize : function(){
+	},
+	getFPS : function(){
+		return this.fps;
 	}
 	
 });
