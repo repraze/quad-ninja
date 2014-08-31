@@ -10,29 +10,23 @@ var Background = Class.extend({
 	},
 	render : function(context,bounds){
 		this.layers.forEach(function(layer){
-			x = (bounds.x)*layer.distance+bounds.width/2-layer.sprite.getWidth()/2;
-			y = (bounds.y)*layer.distance+bounds.height/2-layer.sprite.getHeight()/2;
-			//xrep = bounds.width/layer.sprite.getWidth();
-			//yrep = bounds.height/layer.sprite.getHeight();
-			
-			imin = bounds.x/layer.sprite.getWidth();
-			jmin = bounds.y/layer.sprite.getHeight();
-			
-			imax = (bounds.x+bounds.width)/layer.sprite.getWidth();
-			jmax = (bounds.y+bounds.height)/layer.sprite.getHeight();
+			x = (bounds.x)*layer.distance;
+			y = (bounds.y)*layer.distance;
 			
 			
+			irep = bounds.width/layer.sprite.getWidth()+1;
+			jrep = bounds.height/layer.sprite.getHeight()+1;
 			
-			//context.translate(-(xrep/2*layer.sprite.getWidth()),-(yrep/2*layer.sprite.getHeight()));
-			for(var i = imin; i<imax; i++){
-				for(var j = jmin; j<jmax; j++){
-					context.translate(i*layer.sprite.getWidth(),j*layer.sprite.getHeight());
+			xmin = bounds.x-(x%layer.sprite.getWidth());
+			ymin = bounds.y-(y%layer.sprite.getHeight());
+			
+			for(var i = 0; i<irep; i++){
+				for(var j = 0; j<jrep; j++){
+					context.translate(i*layer.sprite.getWidth()+xmin,j*layer.sprite.getHeight()+ymin);
 					layer.sprite.draw(context);
-					context.translate(-(i*layer.sprite.getWidth()),-(j*layer.sprite.getHeight()));
+					context.translate(-i*layer.sprite.getWidth()-xmin,-j*layer.sprite.getHeight()-ymin);
 				}
 			}
-			//context.translate(xrep/2*layer.sprite.getWidth(),yrep/2*layer.sprite.getHeight());
-			
 		});
 	},
 	update : function(dt){
