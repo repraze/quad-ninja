@@ -25,6 +25,7 @@ var Game = Class.extend({
 				console.error("Game has no state... shouldn't happen :(");
 				return;
 			}
+
 			var deltaT = Math.min(0.05,(date-this.lastFrameDate)/1000);//minimize acceleration upon focus, test, possibility to put calculated number instead of constant
 			this.fpsArray[this.fpsOffset] = 1.0/deltaT;
 			this.fpsOffset=(++this.fpsOffset)%10;

@@ -87,6 +87,7 @@
 			init : function(game){
 				this._super(game);
 				this.scene = new Scene({width:64*10,height:512});
+				this.scene.addLayer();
 				this.createSprites();
 				this.createViewports();
 				this.createCameras();
@@ -100,7 +101,7 @@
 				this.camera1.follow(this.hero);
 				this.camera1.setAxis(Camera.Axis.BOTH);
 				this.hero.move({x:0,y:64});
-				this.scene.addEntity(this.hero);
+				this.scene.addEntity(this.hero,1);
 				this.game.keyboard.addListener(this.hero);
 			},
 			createSprites : function(){
@@ -154,7 +155,6 @@
 		var SceneTest =  Game.extend({
 			init : function(){
 				this._super(new Loading(this),document.getElementById("gameCanvas"));
-				this.context.mozImageSmoothingEnabled = false;
 			}
 		});
 

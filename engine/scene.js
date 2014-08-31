@@ -1,18 +1,19 @@
 var Scene = Class.extend({
 	init : function(size){
-		this.tree = new Quadtree(16,{xmin:0,ymin:0,xmax:size.width,ymax:size.height},5);
+		this.layers = [];
 		this.entities = [];
 		this.layers = [];
 		this._size = size;
+		this.addLayer();
 	},
 
 	render : function(context,bounds){
 		//this.tree.draw(context);
-		//Todo --> layer based rendering
 		if(this._background)
 			this._background.render(context,bounds);
-		var inFrameEntities = this.tree.getObjectsIntersectingRegion(bounds);
-		inFrameEntities.forEach(function(entity){entity.draw(context)});
+		var inFOVEntities = [];
+		this.layers.forEach(function(layer){inFOVEntities = [].concat(inFOVEntities,layer.getObjectsIntersectingRegion(bounds))});
+		inFOVEntities.forEach(function(entity){entity.draw(context)});
 		//console.log(inFrameEntities.length);
 	},
 	update : function(dt){
@@ -20,21 +21,30 @@ var Scene = Class.extend({
 		if(this._background)
 			this._background.update(dt);
 	},
-	getEntity : function(name,hint){
-	
-	},
-	addEntity : function(entity){
-		this.tree.insertObject(entity);
-		this.entities.push(entity);
+	addEntity : function(entity,layerId){
+		entity._sceneLayer = this.layers[layerId||0];
 		entity._scene = this;
+		this.layers[layerId||0].insertObject(entity);
+		this.entities.push(entity);
 	},
-	_onEntityMove : function(entity){
-		this.tree.moveObject(entity);
+	removeEntity : function(){
+		entity._sceneLayer.removeObject(entity);
+		entity._sceneLayer =null;
+		entity._scene=null;
 	},
 	getSize : function(){
 		return this._size;
 	},
 	setBackground : function(background){
 		this._background = background;
+	},
+	addLayer : function(index){
+		if(index > -this.layers.length && index<this.layers.length)
+			this.layers.splice(index || 0,0, new Quadtree(16,{xmin:0,ymin:0,xmax:this._size.width,ymax:this._size.height},5));
+		else if(typeof index === "undefined" || index === this.layers.length)
+			this.layers.push(new Quadtree(16,{xmin:0,ymin:0,xmax:this._size.width,ymax:this._size.height},5));
+		else
+			console.warn("Scene.addLayer : invalid index");
+
 	}
 });

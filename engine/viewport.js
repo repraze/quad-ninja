@@ -11,6 +11,8 @@ var Viewport  = Class.extend({
 			this._bounds={x:0,y:0,width:this.canvas.width, height:this.canvas.height};
 		}
 		this.context = this.canvas.getContext("2d");
+		this.smooth = false;
+		this.context.mozImageSmoothingEnabled = this.smooth;
 	},
 	setBounds : function(bounds){
 		this._bounds={x:0,y:0,width:this.canvas.width, height:this.canvas.height};
@@ -28,6 +30,9 @@ var Viewport  = Class.extend({
 	},
 	render : function(){
 		if(this._camera){
+			//this.smooth = this._camera.getBounds().width > this._bounds.width;
+			//	this.context.mozImageSmoothingEnabled = this.smooth;
+				
 			this.context.save();
 				this.context.beginPath();
 				this.context.rect(this._bounds.x,this._bounds.y,this._bounds.width,this._bounds.height);
