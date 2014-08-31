@@ -25,13 +25,11 @@ var Game = Class.extend({
 				console.error("Game has no state... shouldn't happen :(");
 				return;
 			}
-			//console.log(date+" - "+this.lastFrameDate);
-			//this.currentState._update((date-this.lastFrameDate)/1000); //old
-			var deltaT = Math.min(0.05,(date-this.lastFrameDate)/1000);
-
+			var deltaT = Math.min(0.05,(date-this.lastFrameDate)/1000);//minimize acceleration upon focus, test, possibility to put calculated number instead of constant
 			this.fpsArray[this.fpsOffset] = 1.0/deltaT;
 			this.fpsOffset=(++this.fpsOffset)%10;
-			this.currentState._update(deltaT); //minimize acceleration upon focus, test, possibility to put calculated number instead of constant
+
+			this.currentState._update(deltaT); 
 			this.currentState.render(this.context);
 			this.lastFrameDate = date;
 		}
