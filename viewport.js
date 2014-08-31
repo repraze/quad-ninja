@@ -19,20 +19,24 @@ var Viewport  = Class.extend({
 		   (bounds.x+bounds.width)>this.canvas.width ||
 		   (bounds.y+bounds.height)>this.canvas.height ){
 			   return false;
-		   }
+		}
+		this._bounds={x:bounds.x,y:bounds.y,width:bounds.width, height:bounds.height};
 		return true;
 	},
 	getBounds : function(){
 		return {x:this._bounds.width,y:this._bounds.y,width:this._bounds.width,height:this._bounds.height};
 	},
 	render : function(){
-		//TODO clipping
 		if(this._camera){
-			this.context.translate(this._bounds.x,this._bounds.y);
-			this.context.scale(this._bounds.width,this._bounds.height); //TODO ratio camera/viewport , modify aspectratio 
-			this._camera.render(this.context);
-			this.context.scale(1/this._bounds.width,1/this._bounds.height);
-			this.context.translate(-this._bounds.x,-this._bounds.y);
+			this.context.save();
+				this.context.beginPath();
+				this.context.rect(this._bounds.x,this._bounds.y,this._bounds.width,this._bounds.height);
+				this.context.clip();
+				this.context.closePath();
+				this.context.translate(this._bounds.x,this._bounds.y);
+				this.context.scale(this._bounds.width,this._bounds.height); //TODO ratio camera/viewport , modify aspectratio 
+				this._camera.render(this.context);
+			this.context.restore();
 		}
 	},
 	setCamera : function(camera){
@@ -40,5 +44,8 @@ var Viewport  = Class.extend({
 	},
 	getCamera : function(){
 		return this._camera;
+	},
+	getAspectRatio : function(){
+		return this._bounds.width/this._bounds.height;
 	}
 });

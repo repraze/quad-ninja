@@ -86,8 +86,8 @@ var Entity = Class.extend({
 		this._position.set(position);
 		this.bounds.x=position.x;
 		this.bounds.y=position.y;
-		if(this.scene)
-			this.scene.onEntityMove(this);
+		if(this._scene)
+			this._scene._onEntityMove(this);
 	},
 	getPosition : function(){
 		return this._position.clone(); //TODO return a clone

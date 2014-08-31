@@ -1,7 +1,9 @@
-var Camera = Entity.extend({
+var Camera = Class.extend({
 	init : function(scene,position,size){
-		this._scene = scene;
-		this._super({position:position});
+		this._position = new Vector();
+		if(position)
+			this._position.set(position);
+		this._scene = scene;//rendered scene
 		this.width = size.width;
 		this.height = size.height;
 		this._aspectRatio = this.width/this.height;
@@ -80,6 +82,15 @@ var Camera = Entity.extend({
 	},
 	getScene : function(){
 		return this._scene;
+	},
+	setPosition : function(position){
+		this._position.set(position);
+	},
+	getPosition : function(){
+		return this._position.clone(); //TODO return a clone
+	},
+	move : function(translation){
+		this.setPosition({x:this._position.x+translation.x,y:this._position.y+translation.y});
 	}
 });
 //list axis

@@ -85,44 +85,64 @@
 		var SimpleScene = GameState.extend({
 			init : function(game){
 				this._super(game);
-				sprtMgr.registerSprite({spriteName:"dirt",imageName:"sprite2.png",frames:1,speed:0});
-				sprtMgr.registerSprite({spriteName:"hero_running_right",imageName:"sprite3.png",frames:8,speed:0.1});
-				sprtMgr.registerSprite({spriteName:"hero_running_left",imageName:"sprite4.png",frames:8,speed:0.1});
-				sprtMgr.registerSprite({spriteName:"hero_idle",imageName:"sprite5.png",frames:8,speed:0.2});
-				this.scene = new Scene({width:64*10,height:500});
-				this.camera = new Camera(this.scene,new Vector(60,60),{width:500,height:500/game.aspectRatio});
-				this.viewport = new Viewport(this.game.canvas);
-				this.viewport.setCamera(this.camera);
+				this.scene = new Scene({width:64*10,height:512});
+				this.createSprites();
+				this.createViewports();
+				this.createCameras();
+
 				for(var i =0; i< 10;i++){
 					var ent = new Entity({sprite:sprtMgr.getSprite("dirt")});
 					ent.setPosition({x:i*ent.getSprite().getWidth(),y:128});
 					this.scene.addEntity(ent);
 				}
 				this.hero = new Hero();
-				this.camera.follow(this.hero);
-				this.camera.setAxis(Camera.Axis.BOTH);
+				this.camera1.follow(this.hero);
+				this.camera1.setAxis(Camera.Axis.BOTH);
 				this.hero.move({x:0,y:64});
 				this.scene.addEntity(this.hero);
 				this.game.keyboard.addListener(this.hero);
+			},
+			createSprites : function(){
+				sprtMgr.registerSprite({spriteName:"dirt",imageName:"sprite2.png",frames:1,speed:0});
+				sprtMgr.registerSprite({spriteName:"hero_running_right",imageName:"sprite3.png",frames:8,speed:0.1});
+				sprtMgr.registerSprite({spriteName:"hero_running_left",imageName:"sprite4.png",frames:8,speed:0.1});
+				sprtMgr.registerSprite({spriteName:"hero_idle",imageName:"sprite5.png",frames:8,speed:0.2});
+			},
+			createViewports : function(){
+				var canvas = this.game.canvas;
+				this.viewport1 = new Viewport(canvas,{x:0,y:0,width:canvas.width,height:canvas.height/2});
+				this.viewport2 = new Viewport(canvas,{x:0,y:canvas.height/2,width:canvas.width,height:canvas.height/2});
+			},
+			createCameras : function(){
+				var s = this.scene.getSize();
+				this.camera1 = new Camera(this.scene,{x:0,y:0},{width:500,height:500/this.viewport1.getAspectRatio()});
+				this.camera2 = new Camera(this.scene,{x:0,y:0},{width:s.width,height:s.width/this.viewport2.getAspectRatio()});
+				this.viewport1.setCamera(this.camera1);
+				this.viewport2.setCamera(this.camera2);
+
+				this.camera1._bound = Camera.Bound.BOTH;
+				this.camera2._bound = Camera.Bound.BOTH;
 			},
 			render : function(context){
 				context.clearRect(0,0,this.game.canvas.width,this.game.canvas.height);
 				context.fillStyle = "#dda";
 				context.fillRect(0,0,0,1);
-				this.viewport.render(context);
+				this.viewport1.render(context);
+				this.viewport2.render(context);
 			},
 			update : function(t){
 				if(this.game.keyboard.isKeyDown(Key.DOWN))
-					this.camera.zoom(-5);
+					this.camera1.zoom(-5);
 				if(this.game.keyboard.isKeyDown(Key.UP))
-					this.camera.zoom(5);
+					this.camera1.zoom(5);
 				if(this.game.keyboard.isKeyDown(Key.LEFT))
 					this.hero.run(-1);
 				if(this.game.keyboard.isKeyDown(Key.RIGHT))
 					this.hero.run(1);
 
 				this.scene.update(t);
-				this.camera.update(t);
+				this.camera1.update(t);
+				this.camera2.update(t);
 			}
 			
 		});

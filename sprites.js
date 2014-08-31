@@ -16,8 +16,8 @@ var Sprite = Class.extend({
 				this.img.height,
 				0,
 				0,
-				this.img.width / this.maxFrame,
-				this.img.height);
+				this.img.width / this.maxFrame+1,
+				this.img.height+1);
 			return;
 	},
 	update : function(dt){
