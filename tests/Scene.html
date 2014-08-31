@@ -2,16 +2,16 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Test Scene</title>
-		<script src="../Class.js"></script>
-		<script src="../game.js"></script>
-		<script src="../inputmanager.js"></script>
-		<script src="../imagemanager.js"></script>
-		<script src="../sprites.js"></script>
-		<script src="../quadtree.js"></script>
-		<script src="../entity.js"></script>
-		<script src="../camera.js"></script>
-		<script src="../scene.js"></script>
-		<script src="../viewport.js"></script>
+		<script src="../engine/Class.js"></script>
+		<script src="../engine/game.js"></script>
+		<script src="../engine/inputmanager.js"></script>
+		<script src="../engine/imagemanager.js"></script>
+		<script src="../engine/sprites.js"></script>
+		<script src="../engine/quadtree.js"></script>
+		<script src="../engine/entity.js"></script>
+		<script src="../engine/camera.js"></script>
+		<script src="../engine/scene.js"></script>
+		<script src="../engine/viewport.js"></script>
 	</head>
 	<body>
 		<canvas id="gameCanvas" style="margin:auto;display:block; border : 10px solid black" width=1000 height=500></canvas>
@@ -120,8 +120,8 @@
 				this.viewport1.setCamera(this.camera1);
 				this.viewport2.setCamera(this.camera2);
 
-				this.camera1._bound = Camera.Bound.BOTH;
-				this.camera2._bound = Camera.Bound.BOTH;
+				this.camera1.setConstraint(Camera.Constraint.BOTH);
+				this.camera2.setConstraint(Camera.Constraint.BOTH);
 			},
 			render : function(context){
 				context.clearRect(0,0,this.game.canvas.width,this.game.canvas.height);
@@ -142,7 +142,6 @@
 
 				this.scene.update(t);
 				this.camera1.update(t);
-				this.camera2.update(t);
 			}
 			
 		});

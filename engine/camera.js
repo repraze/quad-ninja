@@ -1,14 +1,14 @@
 var Camera = Class.extend({
 	init : function(scene,position,size){
 		this._position = new Vector();
-		if(position)
-			this._position.set(position);
 		this._scene = scene;//rendered scene
 		this.width = size.width;
 		this.height = size.height;
 		this._aspectRatio = this.width/this.height;
 		this._axis = Camera.Axis.BOTH;
-		this._bound = Camera.Bound.NONE;
+		this._constraint = Camera.Constraint.NONE;
+		if(position)
+			this.setPosition(position);
 	},
 	getBounds : function(){ //needs to be fixed
 		return {x:this._position.x-this.width/2,
@@ -42,28 +42,6 @@ var Camera = Class.extend({
 			}
 			this.setPosition(tmpP);
 		}
-		//Bounds
-		if(this._bound){
-			tmpS = this._scene.getSize();
-			if(this._bound | Camera.Bound.HORIZONTAL){
-				tmpP = this.getPosition();
-				if(tmpP.x-this.width/2<0){
-					this.setPosition({x:this.width/2,y:tmpP.y});
-				}
-				else if(tmpP.x+this.width/2>tmpS.width){
-					this.setPosition({x:tmpS.width-this.width/2,y:tmpP.y});
-				}
-			}
-			if(this._bound | Camera.Bound.VERTICAL){
-				tmpP = this.getPosition();
-				if(tmpP.y-this.height/2<0){
-					this.setPosition({x:tmpP.x,y:this.height/2});
-				}
-				else if(tmpP.y+this.height/2>tmpS.height){
-					this.setPosition({x:tmpP.x,y:tmpS.height-this.height/2});
-				}
-			}
-		}
 	},
 	render : function(context){
 		if(this._scene){
@@ -84,10 +62,39 @@ var Camera = Class.extend({
 		return this._scene;
 	},
 	setPosition : function(position){
+		//Bounds
+		if(this._constraint){
+			tmpS = this._scene.getSize();
+			//tmpPrev = this.getPosition();
+			if(this._constraint | Camera.Constraint.HORIZONTAL){
+				if(position.x-this.width/2<0){
+					position.x=this.width/2;
+				}
+				else if(position.x+this.width/2>tmpS.width){
+					position.x=tmpS.width-this.width/2;
+				}
+			}
+			if(this._constraint | Camera.Constraint.VERTICAL){
+				if(position.y-this.height/2<0){
+					position.y=this.height/2;
+				}
+				else if(position.y+this.height/2>tmpS.height){
+					position.y=tmpS.height-this.height/2;
+				}
+			}
+		}
+	
 		this._position.set(position);
 	},
 	getPosition : function(){
 		return this._position.clone(); //TODO return a clone
+	},
+	setConstraint : function(constraint){
+		this._constraint = constraint;
+		this.setPosition(this._position);
+	},
+	getConstraint : function(){
+		return this._constraint;
 	},
 	move : function(translation){
 		this.setPosition({x:this._position.x+translation.x,y:this._position.y+translation.y});
@@ -101,7 +108,7 @@ Camera.Axis = {
         BOTH: 3
     };
 //bound behaviour
-Camera.Bound = {
+Camera.Constraint = {
         NONE: 0, 
         HORIZONTAL: 1, 
         VERTICAL: 2, 
