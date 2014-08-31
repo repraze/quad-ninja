@@ -7,8 +7,8 @@ var Sprite = Class.extend({
 		
 		this.clock = 0;
 	},
-	draw : function(ctx){
-			ctx.drawImage(
+	draw : function(context){
+			context.drawImage(
 				this.img,
 				this.currentFrame * this.img.width / this.maxFrame,
 				0,
