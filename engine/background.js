@@ -2,13 +2,20 @@ var Background = Class.extend({
 	init : function(){
 		this.layers = [];
 	},
-	addLayer : function(image, distance, repeat, scale){
-		this.layers.push({image: image, distance :distance, repeat :repeat, scale :scale});
+	addLayer : function(sprite, distance, repeat, scale){
+		this.layers.push({sprite: sprite, distance :distance, repeat :repeat, scale :scale});
 	},
 	removeLayer : function(idx){
+		return this.layer.splice(idx,1);
 	},
-	render : function(context){
-
+	render : function(context,bounds){
+		this.layers.forEach(function(layer){
+			layer.sprite.draw();
+		});
+	},
+	update : function(dt){
+		this.layers.forEach(function(layer){
+			layer.sprite.update(dt);
+		});
 	}
-
 });

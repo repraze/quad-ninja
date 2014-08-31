@@ -12,6 +12,7 @@
 		<script src="../engine/camera.js"></script>
 		<script src="../engine/scene.js"></script>
 		<script src="../engine/viewport.js"></script>
+		<script src="../engine/background.js"></script>
 	</head>
 	<body>
 		<canvas id="gameCanvas" style="margin:auto;display:block; border : 10px solid black" width=1000 height=500></canvas>
@@ -63,7 +64,7 @@
 			init : function(game){
 				this._super(game);
 				imgMgr.addListener(this);
-				this.imgSrc = ["test1.png","sprite1.png","sprite2.png","sprite3.png","sprite4.png","sprite5.png"];
+				this.imgSrc = ["test1.png","sprite1.png","sprite2.png","sprite3.png","sprite4.png","sprite5.png","bg.png"];
 				this.imgCounter = this.imgSrc.length;
 				this.imgSrc.forEach(function(src){imgMgr.load(src);});
 			},

@@ -9,12 +9,16 @@ var Scene = Class.extend({
 	render : function(context,bounds){
 		//this.tree.draw(context);
 		//Todo --> layer based rendering
+		if(this._background)
+			this._background.render(context,bounds);
 		var inFrameEntities = this.tree.getObjectsIntersectingRegion(bounds);
 		inFrameEntities.forEach(function(entity){entity.draw(context)});
 		//console.log(inFrameEntities.length);
 	},
-	update : function(t){
-		this.entities.forEach(function(entity){entity.update(t)});
+	update : function(dt){
+		this.entities.forEach(function(entity){entity.update(dt)});
+		if(this._background)
+			this._background.update(dt);
 	},
 	getEntity : function(name,hint){
 	
@@ -29,5 +33,8 @@ var Scene = Class.extend({
 	},
 	getSize : function(){
 		return this._size;
+	},
+	setBackground : function(background){
+		this._background = background;
 	}
 });
