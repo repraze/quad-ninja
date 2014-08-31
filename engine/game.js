@@ -12,7 +12,8 @@ var Game = Class.extend({
 		
 		//Debugging
 		this.fpsOffset = 0;
-		this.fpsArray = new Array(10);
+		this.fpsArray = [];
+		for(var i = 0; i<10; i++){this.fpsArray.push(60.0);}
 	},
 	update : function(date){
 		var self = this;
@@ -26,8 +27,11 @@ var Game = Class.extend({
 			}
 			//console.log(date+" - "+this.lastFrameDate);
 			//this.currentState._update((date-this.lastFrameDate)/1000); //old
-			var fps
-			this.currentState._update(Math.min(0.05,(date-this.lastFrameDate)/1000)); //minimize acceleration upon focus, test, possibility to put calculated number instead of constant
+			var deltaT = Math.min(0.05,(date-this.lastFrameDate)/1000);
+
+			this.fpsArray[this.fpsOffset] = 1.0/deltaT;
+			this.fpsOffset=(++this.fpsOffset)%10;
+			this.currentState._update(deltaT); //minimize acceleration upon focus, test, possibility to put calculated number instead of constant
 			this.currentState.render(this.context);
 			this.lastFrameDate = date;
 		}
@@ -43,7 +47,10 @@ var Game = Class.extend({
 	resize : function(){
 	},
 	getFPS : function(){
-		return this.fps;
+		var fps = 0;
+		this.fpsArray.forEach(function(fpsI){fps+=fpsI});
+		return fps/10.0;
+
 	}
 	
 });
