@@ -11,7 +11,7 @@ var Viewport  = Class.extend({
 			this._bounds={x:0,y:0,width:this.canvas.width, height:this.canvas.height};
 		}
 		this.context = this.canvas.getContext("2d");
-		this.smooth = false;
+		this.smooth = true;
 		this.context.mozImageSmoothingEnabled = this.smooth;
 	},
 	setBounds : function(bounds){

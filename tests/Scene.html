@@ -64,7 +64,7 @@
 			init : function(game){
 				this._super(game);
 				imgMgr.addListener(this);
-				this.imgSrc = ["test1.png","sprite1.png","sprite2.png","sprite3.png","sprite4.png","sprite5.png","bg.png"];
+				this.imgSrc = ["test1.png","sprite1.png","sprite2.png","sprite3.png","sprite4.png","sprite5.png","bg.png","sun.png","sky.png","bg2.png"];
 				this.imgCounter = this.imgSrc.length;
 				this.imgSrc.forEach(function(src){imgMgr.load(src);});
 			},
@@ -91,11 +91,11 @@
 				this.createSprites();
 				this.createViewports();
 				this.createCameras();
+				this.createBackground();
 				this.background = new Background();
-				this.background.addLayer(sprtMgr.getSprite("bg"),0.5,null,null);
-				this.scene.setBackground(this.background);
+				var dirtSprite=sprtMgr.getSprite("dirt");
 				for(var i =0; i< 50;i++){
-					var ent = new Entity({sprite:sprtMgr.getSprite("dirt")});
+					var ent = new Entity({sprite:dirtSprite});
 					ent.setPosition({x:i*ent.getSprite().getWidth(),y:128});
 					this.scene.addEntity(ent);
 				}
@@ -106,17 +106,44 @@
 				this.scene.addEntity(this.hero,1);
 				this.game.keyboard.addListener(this.hero);
 			},
+			createBackground : function(){
+				var background = new Background();
+
+				var layer = new ParallaxLayer(0,{sprite:sprtMgr.getSprite("sky")});
+				background.addLayer(layer);
+
+				layer = new ParallaxLayer({x:0.01,y:1},{sprite:sprtMgr.getSprite("sun")});
+				background.addLayer(layer);
+
+				layer = new ParallaxLayer({x:0.2,y:1},{sprite:sprtMgr.getSprite("mountain2")});
+				var ent = new Entity({sprite:sprtMgr.getSprite("dirt")});
+				ent.setPosition(new Vector(500,30));
+				layer.addEntityOver(ent);
+				background.addLayer(layer);
+
+				layer = new ParallaxLayer(0.8,{sprite:sprtMgr.getSprite("mountain")});
+				ent = new Entity({sprite:sprtMgr.getSprite("dirt")});
+				ent.setPosition(new Vector(300,45));
+				layer.addEntityOver(ent);
+
+				background.addLayer(layer);
+				this.scene.setBackground(background);
+
+		  	},
 			createSprites : function(){
 				sprtMgr.registerSprite({spriteName:"dirt",imageName:"sprite2.png",frames:1,speed:0});
 				sprtMgr.registerSprite({spriteName:"hero_running_right",imageName:"sprite3.png",frames:8,speed:0.1});
 				sprtMgr.registerSprite({spriteName:"hero_running_left",imageName:"sprite4.png",frames:8,speed:0.1});
 				sprtMgr.registerSprite({spriteName:"hero_idle",imageName:"sprite5.png",frames:8,speed:0.2});
-				sprtMgr.registerSprite({spriteName:"bg",imageName:"bg.png"});
+				sprtMgr.registerSprite({spriteName:"mountain",imageName:"bg.png"});
+				sprtMgr.registerSprite({spriteName:"mountain2",imageName:"bg2.png"});
+				sprtMgr.registerSprite({spriteName:"sun",imageName:"sun.png"});
+				sprtMgr.registerSprite({spriteName:"sky",imageName:"sky.png"});
 			},
 			createViewports : function(){
 				var canvas = this.game.canvas;
-				this.viewport1 = new Viewport(canvas,{x:0,y:0,width:canvas.width,height:canvas.height/2});
-				this.viewport2 = new Viewport(canvas,{x:0,y:canvas.height/2,width:canvas.width,height:canvas.height/2});
+				this.viewport1 = new Viewport(canvas,{x:0,y:0,width:canvas.width,height:canvas.height*2/3});
+				this.viewport2 = new Viewport(canvas,{x:0,y:canvas.height*2/3,width:canvas.width,height:canvas.height/3});
 			},
 			createCameras : function(){
 				var s = this.scene.getSize();

@@ -43,8 +43,8 @@ var Sprite = Class.extend({
 var SpriteManager = Class.extend({
 	init : function(imageMgr) {
 		this.imageMgr = imageMgr;
-		
 		this.spritedata = {};
+		this.spritedata["error"] = {imageName:"error"};
 	},
 	registerSprite : function(data) {
 		this.spritedata[ data.spriteName || data.imageName] = data;
