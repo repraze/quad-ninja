@@ -32,6 +32,8 @@ var Quadtree = Class.extend({
 	//exposed method to insert an object
 	insertObject : function(obj){
 		if(!this.containsRegion(obj.getBounds())){
+			if(this.parent===null)
+				this._insertObject(obj);
 			return false;
 		}
 		else

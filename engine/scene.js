@@ -8,13 +8,13 @@ var Scene = Class.extend({
 	},
 
 	render : function(context,bounds){
-		//this.tree.draw(context);
 		if(this._background)
 			this._background.render(context,bounds);
 		var inFOVEntities = [];
 		this.layers.forEach(function(layer){inFOVEntities = [].concat(inFOVEntities,layer.getObjectsIntersectingRegion(bounds))});
 		inFOVEntities.forEach(function(entity){entity.draw(context)});
 		//console.log(inFrameEntities.length);
+		this.layers[0].draw(context);
 	},
 	update : function(dt){
 		this.entities.forEach(function(entity){entity.update(dt)});

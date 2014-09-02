@@ -73,8 +73,7 @@ var Entity = Class.extend({
 	},
 	setSprite : function(sprite){
 		this._sprite = sprite;
-		this.bounds.width = sprite.getWidth();
-		this.bounds.height = sprite.getHeight();
+		this.calculateBounds();
 	},
 	getSprite : function(){
 		return this._sprite;
@@ -84,8 +83,7 @@ var Entity = Class.extend({
 	},
 	setPosition : function(position){
 		this._position.set(position);
-		this.bounds.x=position.x;
-		this.bounds.y=position.y;
+		this.calculateBounds();
 		if(this._sceneLayer){
 			this._sceneLayer.moveObject(this);
 		}
@@ -95,5 +93,11 @@ var Entity = Class.extend({
 	},
 	move : function(translation){
 		this.setPosition({x:this._position.x+translation.x,y:this._position.y+translation.y});
+	},
+	calculateBounds : function(){
+		this.bounds.x = this._position.x-this._sprite.origin.x;
+		this.bounds.y = this._position.y-this._sprite.origin.y;
+		this.bounds.width = this._sprite.getWidth();
+		this.bounds.height = this._sprite.getHeight();
 	}
 });

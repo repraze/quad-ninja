@@ -13,6 +13,7 @@ var ParallaxLayer = Class.extend({
 		var scale = opts.scale || 1;
 		this.over = opts.over || []; // A list of entities
 		this.below = opts.below || []; //A list of entities
+		this.visible=true;
 	},
 	render : function(context,camBounds){
 		x = (camBounds.x)*this.speedFactor.x;
@@ -66,6 +67,9 @@ var ParallaxLayer = Class.extend({
 	},
 	getPerceivedSize : function(scene){
 		return {}
+	},
+	setVisible : function(visible){
+		this.visible = (typeof visible !== "undefined" ? visible : true);
 	}
 
 });
@@ -82,7 +86,8 @@ var Background = Class.extend({
 	},
 	render : function(context,camBounds){
 		this.layers.forEach(function(layer){
-			layer.render(context,camBounds);
+			if(layer.visible)
+				layer.render(context,camBounds);
 		});
 	},
 	update : function(dt){
